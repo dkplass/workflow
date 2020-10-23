@@ -1,0 +1,93 @@
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+@import './media.scss';
+
+body {
+    height: 100%;
+    font-family: 'Cormorant Garamond', 'Roboto', sans-serif, serif;
+}
+
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+#app {
+    height: 100%;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+*:focus,
+*:active {
+    outline: none;
+}
+
+a:focus,
+a:active {
+    outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+}
+
+div:focus {
+    outline: none;
+}
+
+.clearfix {
+    &:after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: " ";
+        clear: both;
+        height: 0;
+    }
+}
+
+img {
+    border: none;
+}
+
+.not-collapsed {
+    .when-close {
+      display: none;
+    }
+}
+  
+.collapsed {
+    .when-open {
+      display: none;
+    }
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0px;
+    flex: 1 1 auto;
+    width: 100%;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
