@@ -1,15 +1,19 @@
 <template>
   <div class="wrapper">
-    <FlowchartEditor
+    <flowchart-editor
       :read-only="readOnly"
       :key="reRender"
       :chart-data="flowChartData"
-    ></FlowchartEditor>
+      :chart-data-node-items="flowChartNodeItems"
+      @save-data="save"
+    ></flowchart-editor>
   </div>
 </template>
 
 <script>
 import FlowchartEditor from "@/components/vue-flowchart-editor/FlowchartEditor.vue";
+import chartData from "@/data/data";
+import dataNodeItems from "@/data/dataNodeItems";
 
 export default {
   name: "Home",
@@ -20,62 +24,8 @@ export default {
     return {
       readOnly: false,
       reRender: +new Date(),
-      flowChartData: {
-        nodes: [
-          {
-            type: "node",
-            size: "72*72",
-            shape: "flow-circle",
-            color: "#FA8C16",
-            label: "开始",
-            x: 468,
-            y: 61,
-            id: "01729835",
-            index: 0,
-            data: [
-              {
-                name: "prop1",
-                value: "prop1"
-              },
-              {
-                name: "prop2",
-                value: "prop2"
-              }
-            ]
-          },
-          {
-            type: "node",
-            size: "80*48",
-            shape: "flow-rect",
-            color: "#1890FF",
-            label: "测试节点",
-            x: 468,
-            y: 201.5,
-            id: "b69121d6",
-            index: 1,
-            data: [
-              {
-                name: "prop3",
-                value: "prop3"
-              },
-              {
-                name: "prop4",
-                value: "prop4"
-              }
-            ]
-          }
-        ],
-        edges: [
-          {
-            source: "01729835",
-            sourceAnchor: 2,
-            target: "b69121d6",
-            targetAnchor: 0,
-            id: "070785c1",
-            index: 4
-          }
-        ]
-      }
+      flowChartData: chartData,
+      flowChartNodeItems: dataNodeItems
     };
   },
   mounted() {
@@ -86,6 +36,12 @@ export default {
         this.reRender = +new Date(); // 重新渲染组件
       });
     });
+  },
+  methods: {
+    save(data) {
+      this.flowChartData = JSON.parse(JSON.stringify(data));
+      console.log(this.flowChartData);
+    }
   }
 };
 </script>
