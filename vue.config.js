@@ -1,7 +1,7 @@
 const name = "Work Flow Editor";
 
 module.exports = {
-  publicPath: "/workflow/",
+  publicPath: "/workflow/dist",
   configureWebpack: {
     name,
     optimization: {
