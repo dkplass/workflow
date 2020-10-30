@@ -21,6 +21,7 @@
             :onAfterChange="handleAfterChange"
             :graph="graphConfig"
           />
+
           <div class="tooltip">
             <template v-for="item in tooltipData">
               <p :key="item.name">{{ item.name }}: {{ item.value }}</p>
@@ -40,9 +41,23 @@
     </div>
     <!-- Mouse Right Button Context Menu -->
     <editor-context-menu v-if="!readOnly"></editor-context-menu>
+    <register-node
+      name="custom"
+      :config="{
+        options: {
+          size: 60,
+          style: {
+            fill: '#FA8C16',
+            stroke: 'green',
+            lineWidth: 1
+          }
+        }
+      }"
+      extend="flow-circle"
+    ></register-node>
     <register-edge
       name="custom-polyline"
-      extend="flow-polyline"
+      extend="polyline"
       :config="customEdgeConfig"
     ></register-edge>
     <custom-command :save="saveChartData" :download="downloadImage"></custom-command>
@@ -50,7 +65,7 @@
 </template>
 
 <script>
-import VueFlowchartEditor, { Flow, RegisterEdge } from "vue-flowchart-editor";
+import VueFlowchartEditor, { Flow, RegisterEdge, RegisterNode } from "vue-flowchart-editor";
 import EditorToolbar from "./tools/Toolbar.vue";
 import EditorItemPanel from "./tools/ItemPanel.vue";
 import EditorDetailPanel from "./tools/DetailPanel.vue";
@@ -64,6 +79,7 @@ export default {
     VueFlowchartEditor,
     Flow,
     RegisterEdge,
+    RegisterNode,
     EditorToolbar,
     EditorItemPanel,
     EditorDetailPanel,
@@ -79,25 +95,17 @@ export default {
       graphConfig: {
         mode: "readOnly"
       },
-      customEdgeConfig: {
-        getActivedStyle(/*item*/) {
-          return {
-            lineWidth: 3
-          };
-        },
-        getSelectedStyle(/*item*/) {
-          return {
-            lineWidth: 3
-          };
-        }
-      },
+      customEdgeConfig: this.customEdge(),
       tooltipDom: null,
       tooltipShow: true,
       tooltipData: []
     };
   },
-  created() {},
+  created() {
+    console.log(RegisterNode);
+  },
   mounted() {
+    console.log(RegisterNode);
     this.tooltipDom = document.getElementsByClassName("tooltip")[0];
   },
   methods: {
@@ -151,6 +159,38 @@ export default {
     downloadImage() {
       const page = this.$refs["flowChart"].propsAPI.editor.getCurrentPage();
       this._downloadImage(page.saveImage().toDataURL("image/png"));
+    },
+    customEdge(e) {
+      console.log(e);
+      return {
+        startArrow: {
+          path: "M 0,0 L 20,10 L 20,-10 Z",
+          fill: "#333",
+          stroke: "#666",
+          opacity: 0.8
+        },
+        endArrow: {
+          path: "M 0,0 L 20,10 L 20,-10 Z",
+          fill: "#333",
+          stroke: "#666",
+          opacity: 0.8
+        },
+        getStyle(e) {
+          const style = e.model.style;
+          style.lineWidth = 2;
+
+          return {
+            ...e.model.style
+          };
+        },
+        afterDraw(e) {
+          console.log(e);
+          console.log(e.model);
+          // e.model.style.lineWidth = 5;
+          console.log(e.group);
+        },
+        update: undefined
+      };
     }
   }
 };

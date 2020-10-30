@@ -35,9 +35,9 @@
           <input v-model="formModel.size" />
         </p>
         <p class="form-item">
-          <button @click.prevent="handleSubmit" v-if="!readOnly">
+          <b-button @click.prevent="handleSubmit" v-if="!readOnly" size="sm">
             更新
-          </button>
+          </b-button>
         </p>
       </div>
       <div v-else-if="type === 'edge'">
@@ -186,7 +186,6 @@ hr {
 
   button {
     width: 160px;
-    height: 30px;
     margin: 0 auto;
   }
 }

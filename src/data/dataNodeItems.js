@@ -1,48 +1,51 @@
 export default [
-  {
-    model: {
-      label: "測試節點1",
-      data: [
-        {
-          name: "id",
-          value: "node1"
-        },
-        {
-          name: "prop11",
-          value: "prop11"
-        },
-        {
-          name: "prop12",
-          value: "prop12"
-        }
-      ]
-    }
-  },
+  // {
+  //   shape: "star",
+  //   size: "60*60",
+  //   model: {
+  //     type: "custom",
+  //     // label: "測試節點1",
+  //     // color: "green",
+  //     // fill: "#FA8C16",
+  //     //   stroke: "green",
+  //     data: [
+  //       {
+  //         name: "prop11",
+  //         value: "prop11"
+  //       },
+  //       {
+  //         name: "prop12",
+  //         value: "prop12"
+  //       }
+  //     ]
+  //   }
+  // },
   {
     shape: "flow-circle",
     size: "72*72",
     model: {
-      label: "起始節點",
-      color: "#FA8C16"
+      label: "circle",
+      color: "#13C2C2"
     }
   },
   {
     shape: "flow-rect",
     model: {
-      label: "常規節點"
+      label: "rect",
+      color: "#13C2C2"
     }
   },
   {
     shape: "flow-rhombus",
     model: {
-      label: "分岔節點",
+      label: "rhombus",
       color: "#13C2C2"
     }
   },
   {
     shape: "flow-capsule",
     model: {
-      label: "模型節點",
+      label: "capsule",
       color: "#13C2C2"
     }
   }

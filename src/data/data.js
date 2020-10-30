@@ -4,8 +4,19 @@ export default {
       type: "node",
       size: "72*72",
       shape: "flow-circle",
-      color: "#FA8C16",
+      style: {
+        fill: "#FA8C16",
+        stroke: "green"
+      },
+      // color: "red",
       label: "開始",
+      labelCfg: {
+        position: "bottom",
+        offset: 100,
+        style: {
+          fill: "#666"
+        }
+      },
       x: 468,
       y: 61,
       id: "01729835",
@@ -41,16 +52,49 @@ export default {
           value: "prop4"
         }
       ]
+    },
+    {
+      id: "node0",
+      type: "custom",
+      shape: "custom",
+      x: 200,
+      y: 100
     }
   ],
   edges: [
     {
+      id: "070785c1",
+      index: 4,
+      shape: "custom-polyline",
       source: "01729835",
       sourceAnchor: 2,
       target: "b69121d6",
       targetAnchor: 0,
-      id: "070785c1",
-      index: 4
+      // size: 5,
+      style: {
+        stroke: "#979190",
+        lineWidth: 3
+      },
+      // label: "cubic-vertical",
+      // labelCfg: {
+      //   position: "center",
+      //   autoRotate: true,
+      //   style: {
+      //     stroke: "white",
+      //     lineWidth: 5,
+      //     fill: "#722ed1"
+      //   }
+      // },
+      controlPoints: [
+        {
+          x: 600,
+          y: 100
+        },
+        {
+          x: 468,
+          y: 150
+        }
+      ]
     }
   ]
 };
