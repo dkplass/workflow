@@ -2,7 +2,7 @@
   <detail-panel>
     <template v-slot="{ status }">
       <node-panel :status="status">
-        <detail-form type="node" :read-only="readOnly"></detail-form>
+        <detail-form type="node" :read-only="readOnly" />
       </node-panel>
       <edge-panel :status="status">
         <detail-form type="edge" :read-only="readOnly" />
@@ -10,8 +10,8 @@
       <group-panel :status="status">
         <detail-form type="group" :read-only="readOnly" />
       </group-panel>
-      <multi-panel :status="status"></multi-panel>
-      <canvas-panel :status="status"></canvas-panel>
+      <multi-panel :status="status" />
+      <canvas-panel :status="status" />
     </template>
   </detail-panel>
 </template>
@@ -24,11 +24,11 @@ import {
   MultiPanel,
   CanvasPanel,
   DetailPanel
-} from "vue-flowchart-editor";
-import DetailForm from "./DetailForm.vue";
+} from 'vue-flowchart-editor'
+import DetailForm from './DetailForm.vue'
 
 export default {
-  name: "EditorDetailPanel",
+  name: 'EditorDetailPanel',
   components: {
     NodePanel,
     EdgePanel,
@@ -38,8 +38,8 @@ export default {
     DetailPanel,
     DetailForm
   },
-  props: ["readOnly"]
-};
+  props: ['readOnly']
+}
 </script>
 
 <style lang="scss" scoped></style>

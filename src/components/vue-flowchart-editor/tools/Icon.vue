@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: "EditorIcon",
-  props: ["type", "text"]
-};
+  name: 'EditorIcon',
+  props: ['type', 'text']
+}
 </script>

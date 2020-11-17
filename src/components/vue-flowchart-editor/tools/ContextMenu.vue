@@ -34,11 +34,11 @@ import {
   MultiMenu,
   CanvasMenu,
   ContextMenu
-} from "vue-flowchart-editor";
-import MenuLi from "./ContextMenuItem";
+} from 'vue-flowchart-editor'
+import MenuLi from './ContextMenuItem'
 
 export default {
-  name: "EditorContextMenu",
+  name: 'EditorContextMenu',
   components: {
     NodeMenu,
     EdgeMenu,
@@ -48,7 +48,7 @@ export default {
     ContextMenu,
     MenuLi
   }
-};
+}
 </script>
 
 <style lang="scss">

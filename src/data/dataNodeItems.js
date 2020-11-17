@@ -1,4 +1,26 @@
 export default [
+  {
+    shape: 'flow-circle',
+    size: '72*72',
+    model: {
+      label: '節點',
+      style: {
+        fill: '#FA8C16',
+        stroke: '#FA8C16'
+      }
+    }
+  },
+  {
+    shape: 'flow-rect',
+    size: '80*48',
+    model: {
+      label: '節點',
+      style: {
+        fill: '#FA8C16',
+        stroke: '#FA8C16'
+      }
+    }
+  }
   // {
   //   shape: "star",
   //   size: "60*60",
@@ -20,35 +42,20 @@ export default [
   //     ]
   //   }
   // },
-  {
-    shape: "flow-circle",
-    size: "72*72",
-    model: {
-      label: "circle",
-      color: "#13C2C2"
-    }
-  },
-  {
-    shape: "flow-rect",
-    model: {
-      label: "rect",
-      color: "#13C2C2"
-    }
-  },
-  {
-    shape: "flow-rhombus",
-    model: {
-      label: "rhombus",
-      color: "#13C2C2"
-    }
-  },
-  {
-    shape: "flow-capsule",
-    model: {
-      label: "capsule",
-      color: "#13C2C2"
-    }
-  }
+  // {
+  //   shape: 'flow-rhombus',
+  //   model: {
+  //     label: 'rhombus',
+  //     color: '#13C2C2'
+  //   }
+  // },
+  // {
+  //   shape: 'flow-capsule',
+  //   model: {
+  //     label: 'capsule',
+  //     color: '#13C2C2'
+  //   }
+  // }
 
   // {
   //   shape: "flow-ellipse",
@@ -121,4 +128,4 @@ export default [
   //     color: "#13C2C2"
   //   }
   // }
-];
+]

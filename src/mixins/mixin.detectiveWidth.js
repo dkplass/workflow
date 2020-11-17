@@ -3,31 +3,31 @@ export const DetectiveWidth = {
     return {
       windowWidth: 0,
       windowHeight: 0
-    };
+    }
   },
   mounted() {
-    this.detector();
+    this.detector()
     this.$nextTick(() => {
-      this.install();
-    });
+      this.install()
+    })
   },
   destroyed() {
-    this.uninstall();
+    this.uninstall()
   },
   beforeRouteLeave(to, from, next) {
-    this.uninstall();
-    next();
+    this.uninstall()
+    next()
   },
   methods: {
     detector() {
-      this.windowWidth = window.innerWidth;
-      this.windowHeight = window.innerHeight;
+      this.windowWidth = window.innerWidth
+      this.windowHeight = window.innerHeight
     },
     install() {
-      window.addEventListener("resize", this.detector);
+      window.addEventListener('resize', this.detector)
     },
     uninstall() {
-      window.removeEventListener("resize", this.detector);
+      window.removeEventListener('resize', this.detector)
     }
   }
-};
+}

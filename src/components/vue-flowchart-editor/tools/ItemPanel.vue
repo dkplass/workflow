@@ -14,7 +14,7 @@
       >
         <template v-if="item.src">
           <div class="item item-img">
-            <img :src="item.src" :alt="item.model.label" />
+            <img :src="item.src" :alt="item.model.label">
           </div>
         </template>
         <template v-else>
@@ -28,10 +28,10 @@
 </template>
 
 <script>
-import { Item, ItemPanel } from "vue-flowchart-editor";
+import { Item, ItemPanel } from 'vue-flowchart-editor'
 
 export default {
-  name: "EditorItemPanel",
+  name: 'EditorItemPanel',
   components: { ItemPanel, Item },
   props: {
     nodeItems: {
@@ -39,7 +39,7 @@ export default {
       default: () => []
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import { Minimap } from "vue-flowchart-editor";
+import { Minimap } from 'vue-flowchart-editor'
 
 export default {
-  name: "EditorMinimap",
+  name: 'EditorMinimap',
   components: { Minimap }
-};
+}
 </script>

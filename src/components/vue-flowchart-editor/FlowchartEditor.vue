@@ -3,25 +3,28 @@
     <div class="vfe-chart">
       <!-- Top Menu -->
       <div class="vfe-chart-header">
-        <editor-toolbar :chart-data="flowChartData" :read-only="readOnly"></editor-toolbar>
+        <editor-toolbar :chart-data="flowChartData" :read-only="readOnly" />
       </div>
       <div class="vfe-chart-container">
         <!-- Left Panel -->
         <div class="vfe-chart-sidebar">
-          <editor-item-panel v-if="!readOnly" :node-items="flowChartNodeItems"></editor-item-panel>
+          <editor-item-panel v-if="!readOnly" :node-items="flowChartNodeItems" />
         </div>
         <!-- Main Canvas -->
         <div class="vfe-chart-main">
           <flow
             :data="flowChartData"
-            :onClick="handleClick"
-            :onNodeClick="handleNodeClick"
-            :onNodeDoubleClick="handleNodeDoubleClick"
-            :onNodeMouseLeave="handleNodeMouseLeave"
-            :onAfterChange="handleAfterChange"
+            :on-click="handleClick"
+            :on-node-click="handleNodeClick"
+            :on-node-double-click="handleNodeDoubleClick"
+            :on-node-mouse-leave="handleNodeMouseLeave"
+            :on-before-change="handleBeforeChange"
+            :on-after-change="handleAfterChange"
+            :on-before-viewport-change="onBeforeViewportChange"
+            :on-before-item-actived="onBeforeItemActived"
             :graph="graphConfig"
           />
-
+          <!-- <register-behaviour name="dragEdgeControlPoint" :behaviour="customBehaviourConfig" :dependences="['dragEdgeControlPoint']" /> -->
           <div class="tooltip">
             <template v-for="item in tooltipData">
               <p :key="item.name">{{ item.name }}: {{ item.value }}</p>
@@ -31,17 +34,17 @@
         <!-- Right Panel -->
         <div class="vfe-chart-panel">
           <div class="vfe-chart-panel-detail">
-            <editor-detail-panel :read-only="readOnly"></editor-detail-panel>
+            <editor-detail-panel :read-only="readOnly" />
           </div>
           <div class="vfe-chart-panel-minimap">
-            <editor-minimap></editor-minimap>
+            <editor-minimap />
           </div>
         </div>
       </div>
     </div>
     <!-- Mouse Right Button Context Menu -->
-    <editor-context-menu v-if="!readOnly"></editor-context-menu>
-    <register-node
+    <editor-context-menu v-if="!readOnly" />
+    <!-- <register-node
       name="custom"
       :config="{
         options: {
@@ -54,32 +57,27 @@
         }
       }"
       extend="flow-circle"
-    ></register-node>
-    <register-edge
-      name="custom-polyline"
-      extend="polyline"
-      :config="customEdgeConfig"
-    ></register-edge>
-    <custom-command :save="saveChartData" :download="downloadImage"></custom-command>
+    /> -->
+    <custom-command :save="saveChartData" :download="downloadImage" />
   </vue-flowchart-editor>
 </template>
 
 <script>
-import VueFlowchartEditor, { Flow, RegisterEdge, RegisterNode } from "vue-flowchart-editor";
-import EditorToolbar from "./tools/Toolbar.vue";
-import EditorItemPanel from "./tools/ItemPanel.vue";
-import EditorDetailPanel from "./tools/DetailPanel.vue";
-import EditorMinimap from "./tools/EditorMinimap.vue";
-import EditorContextMenu from "./tools/ContextMenu.vue";
-import CustomCommand from "./tools/CustomCommand.vue";
+import VueFlowchartEditor, { Flow } from 'vue-flowchart-editor'
+import EditorToolbar from './tools/Toolbar.vue'
+import EditorItemPanel from './tools/ItemPanel.vue'
+import EditorDetailPanel from './tools/DetailPanel.vue'
+import EditorMinimap from './tools/EditorMinimap.vue'
+import EditorContextMenu from './tools/ContextMenu.vue'
+import CustomCommand from './tools/CustomCommand.vue'
 
 export default {
-  name: "FlowchartEditor",
+  name: 'FlowchartEditor',
   components: {
     VueFlowchartEditor,
     Flow,
-    RegisterEdge,
-    RegisterNode,
+    // RegisterNode,
+    // RegisterEdge,
     EditorToolbar,
     EditorItemPanel,
     EditorDetailPanel,
@@ -87,113 +85,159 @@ export default {
     EditorContextMenu,
     CustomCommand
   },
-  props: ["readOnly", "toggleReadOnly", "chartData", "chartDataNodeItems", "saveData"],
+  // eslint-disable-next-line vue/require-prop-types
+  // props: ['readOnly', 'chartData', 'chartDataNodeItems', 'saveData'],
+  props: {
+    readOnly: Boolean,
+    chartData: {
+      type: Object,
+      default: function() {
+        return { }
+      }
+    },
+    chartDataNodeItems: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    }
+  },
   data() {
     return {
       flowChartData: this.chartData,
       flowChartNodeItems: this.chartDataNodeItems,
       graphConfig: {
-        mode: "readOnly"
+        mode: 'readOnly'
       },
       customEdgeConfig: this.customEdge(),
       tooltipDom: null,
       tooltipShow: true,
       tooltipData: []
-    };
+    }
   },
-  created() {
-    console.log(RegisterNode);
-  },
+  created() {},
   mounted() {
-    console.log(RegisterNode);
-    this.tooltipDom = document.getElementsByClassName("tooltip")[0];
+    this.tooltipDom = document.getElementsByClassName('tooltip')[0]
   },
   methods: {
     handleClick(e) {
-      console.log(e);
+      console.log(e)
       if (this.readOnly && !e.item) {
-        this.tooltipDom.style.display = "none";
+        this.tooltipDom.style.display = 'none'
       }
     },
     handleNodeClick(e) {
-      console.log(e);
+      console.log(e)
     },
     handleNodeDoubleClick(e) {
-      console.log(e.item.model.data);
+      console.log(e.item.model.data)
       if (this.readOnly) {
-        this.tooltipData = e.item.model.data;
+        this.tooltipData = e.item.model.data
         this.$nextTick(() => {
-          this.tooltipDom.style.left = e.domX + "px";
-          this.tooltipDom.style.top = e.domY + "px";
-          this.tooltipDom.style.display = "block";
-        });
+          this.tooltipDom.style.left = e.domX + 'px'
+          this.tooltipDom.style.top = e.domY + 'px'
+          this.tooltipDom.style.display = 'block'
+        })
       }
     },
     handleNodeMouseLeave(e) {
       if (this.readOnly) {
-        console.log(e);
-        this.tooltipDom.style.display = "none";
+        console.log(e)
+        this.tooltipDom.style.display = 'none'
       }
+    },
+    handleBeforeChange(e) {
+      console.log(e)
+      console.log(this.chartData)
+      const { ComNo, LoopNum, ProdNo, VersionNo } = this.chartData.nodes[0] || {
+        ComNo: '', LoopNum: '', ProdNo: '', VersionNo: ''
+      }
+
+      e.model.ComNo = ComNo
+      e.model.LoopNum = LoopNum
+      e.model.ProdNo = ProdNo
+      e.model.VersionNo = VersionNo
     },
     handleAfterChange(e) {
       if (!this.readOnly) {
-        const { action, item } = e;
-        console.log(action);
+        const { action, item } = e
+        console.log(action, item)
         if (item && item.getModel) {
-          const model = item.getModel();
-          console.log(model);
+          const model = item.getModel()
+          console.log(model)
         }
         // 可以根据 action 和 model 来决定是否删掉左侧用过的节点
       }
     },
-    saveChartData(data) {
-      this.$emit("save-data", data);
+    onBeforeViewportChange() {
     },
-    _downloadImage(data, filename = "flowchart.png") {
-      const a = document.createElement("a");
-      a.href = data;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
+    onBeforeItemActived() {
+    },
+    saveChartData(data) {
+      this.$emit('save-data', data)
+    },
+    _downloadImage(data, filename = 'flowchart.png') {
+      const a = document.createElement('a')
+      a.href = data
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
     },
     downloadImage() {
-      const page = this.$refs["flowChart"].propsAPI.editor.getCurrentPage();
-      this._downloadImage(page.saveImage().toDataURL("image/png"));
+      const page = this.$refs['flowChart'].propsAPI.editor.getCurrentPage()
+      this._downloadImage(page.saveImage().toDataURL('image/png'))
     },
-    customEdge(e) {
-      console.log(e);
+    customEdge() {
       return {
-        startArrow: {
-          path: "M 0,0 L 20,10 L 20,-10 Z",
-          fill: "#333",
-          stroke: "#666",
-          opacity: 0.8
-        },
-        endArrow: {
-          path: "M 0,0 L 20,10 L 20,-10 Z",
-          fill: "#333",
-          stroke: "#666",
-          opacity: 0.8
-        },
+        // getStyle(e) {
+        //   const style = e.model.style
+        //   style.lineWidth = 3
+
+        //   return {
+        //     ...e.model.style
+        //   }
+        // },
         getStyle(e) {
-          const style = e.model.style;
-          style.lineWidth = 2;
+          console.log(e)
+          const style = e.model.style
+          style.lineWidth = 3
 
           return {
             ...e.model.style
-          };
-        },
-        afterDraw(e) {
-          console.log(e);
-          console.log(e.model);
-          // e.model.style.lineWidth = 5;
-          console.log(e.group);
-        },
-        update: undefined
-      };
+          }
+        }
+        // startArrow: {
+        //   path: "M 0,0 L 20,10 L 20,-10 Z",
+        //   fill: "#333",
+        //   stroke: "#666",
+        //   opacity: 0.8
+        // },
+        // getStyle(e) {
+        //   const style = e.model.style
+        //   style.lineWidth = 3
+
+        //   return {
+        //     ...e.model.style
+        //   }
+        // },
+
+        // drawKeyShape(t) {
+        //   console.log(t)
+        // },
+        // afterDraw(e) {
+        //   console.log(e.getPathByPoints)
+        //   console.log(e.model)
+        //   // e.model.style.lineWidth = 5;
+        //   console.log(e.group)
+        // }
+      }
+    },
+    customBehaviourConfig(e) {
+      console.log(e)
+      return {}
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -4,62 +4,72 @@
       name="generateData"
       :config="generateDataCommandConfig"
       extend="copy"
-    ></register-command>
+    />
     <register-command
       name="downloadImage"
       :config="downloadImageCommandConfig"
       extend="copy"
-    ></register-command>
+    />
   </div>
 </template>
 
 <script>
-import { RegisterCommand } from "vue-flowchart-editor";
+import { RegisterCommand } from 'vue-flowchart-editor'
 
 export default {
-  name: "CustomCommand",
+  name: 'CustomCommand',
   components: {
     RegisterCommand
   },
-  inject: ["root"],
-  props: ["save", "download"],
+  inject: ['root'],
+  // props: ['save', 'download'],
+  props: {
+    save: {
+      type: Function,
+      default: () => {}
+    },
+    download: {
+      type: Function,
+      default: () => {}
+    }
+  },
   data() {
-    const { propsAPI } = this.root;
-    const { save, download } = this;
+    const { propsAPI } = this.root
+    const { save, download } = this
     return {
       generateDataCommandConfig: {
         queue: false, // 是否進入隊列，默認為true
         enable(/* editor */) {
           // 命令是否可用
-          return true;
+          return true
         },
         execute(/* editor */) {
           // 正向命令邏輯
-          console.log("執行正向命令");
-          const data = propsAPI.save();
-          console.log(data);
-          console.log(JSON.stringify(data));
-          save(data);
-          alert(JSON.stringify(data));
+          console.log('執行正向命令')
+          const data = propsAPI.save()
+          console.log(data)
+          console.log(JSON.stringify(data))
+          save(data)
+          // alert(JSON.stringify(data))
         },
         back(/* editor */) {
           // 反向命令邏輯
-          console.log("執行反向命令");
+          console.log('執行反向命令')
         }
       },
       downloadImageCommandConfig: {
         queue: false,
         enable() {
-          return true;
+          return true
         },
         execute() {
-          download();
+          download()
         },
         back() {}
       }
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

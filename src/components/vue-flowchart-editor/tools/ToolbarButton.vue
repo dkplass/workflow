@@ -6,20 +6,20 @@
 </template>
 
 <script>
-import { Command } from "vue-flowchart-editor";
-import Icon from "./Icon.vue";
+import { Command } from 'vue-flowchart-editor'
+import Icon from './Icon.vue'
 
 export default {
-  name: "ToolbarButton",
+  name: 'ToolbarButton',
   components: {
     Command,
     Icon
   },
-  props: ["command", "icon", "text", "label"],
+  props: ['command', 'icon', 'text', 'label'],
   computed: {
     iconType() {
-      return `icon${this.icon || this.command}`;
+      return `icon${this.icon || this.command}`
     }
   }
-};
+}
 </script>

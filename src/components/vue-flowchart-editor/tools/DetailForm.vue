@@ -5,20 +5,20 @@
         <!--  customize properties -->
         <p class="form-item">
           <label>ID</label>
-          <input type="text" v-model="formModel.id" />
+          <input v-model="formModel.id" type="text" disabled>
         </p>
         <p class="form-item">
           <label>名稱</label>
-          <input type="text" v-model="formModel.label" />
+          <input v-model="formModel.label" type="text">
         </p>
-        <p class="form-item" v-for="item in formModel.data" :key="item.name">
+        <p v-for="item in formModel.data" :key="item.name" class="form-item">
           <label>{{ item.name }}</label>
-          <input v-model="item.value" />
+          <input v-model="item.value">
         </p>
-        <hr />
+        <hr>
         <p class="form-item">
           <label>顏色</label>
-          <input v-model="formModel.color" />
+          <input v-model="formModel.style.fill">
         </p>
         <p class="form-item">
           <label>形狀</label>
@@ -32,42 +32,42 @@
         </p>
         <p class="form-item">
           <label>尺寸</label>
-          <input v-model="formModel.size" />
+          <input v-model="formModel.size">
         </p>
         <p class="form-item">
-          <b-button @click.prevent="handleSubmit" v-if="!readOnly" size="sm">
+          <b-button v-if="!readOnly" size="sm" @click.prevent="handleSubmit">
             更新
           </b-button>
         </p>
       </div>
       <div v-else-if="type === 'edge'">
-        <p>
+        <!-- <p>
           <select v-model="formModel.shape">
             <option value="">-- 請選擇邊框的形狀 --</option>
-            <option value="flow-smooth">Smooth</option>
             <option value="flow-polyline">Polyline</option>
+            <option value="flow-smooth">Smooth</option>
             <option value="flow-polyline-round">Polyline Round</option>
             <option value="custom-polyline">Custom Polyline</option>
           </select>
-        </p>
+        </p> -->
         <p class="form-item">
           <label>id</label>
-          <input v-model="formModel.id" />
+          <input v-model="formModel.id">
         </p>
         <p class="form-item">
           <label>名稱</label>
-          <input v-model="formModel.label" />
+          <input v-model="formModel.label">
         </p>
-        <p class="form-item" v-for="item in formModel.data" :key="item.name">
+        <p v-for="item in formModel.data" :key="item.name" class="form-item">
           <label>{{ item.name }}</label>
-          <input v-model="item.value" />
+          <input v-model="item.value">
         </p>
         <p class="form-item">
           <b-button @click.prevent="handleSubmit">更新</b-button>
         </p>
       </div>
       <div v-else-if="type === 'group'">
-        <input v-model="formModel.label" @blur.prevent="handleSubmit" />
+        <input v-model="formModel.label" @blur.prevent="handleSubmit">
       </div>
     </form>
   </div>
@@ -75,9 +75,16 @@
 
 <script>
 export default {
-  name: "EditorDetailForm",
-  inject: ["root"],
-  props: ["type", "readOnly"],
+  name: 'EditorDetailForm',
+  inject: ['root'],
+  // props: ['type', 'readOnly'],
+  props: {
+    type: {
+      type: String,
+      default: 'node'
+    },
+    readOnly: Boolean
+  },
   data() {
     return {
       formModel: {},
@@ -85,61 +92,61 @@ export default {
       defaultNodeWidth: 80,
       defaultNodeHeight: 48,
       fontSize: 12
-    };
+    }
   },
   created() {
-    const formModel = this.root.propsAPI.getSelected()[0].getModel();
+    const formModel = this.root.propsAPI.getSelected()[0].getModel()
     this.formModel = Object.assign(
       {},
-      { shape: "flow-smooth" },
+      { shape: 'flow-polyline' },
       JSON.parse(JSON.stringify(formModel))
-    );
+    )
   },
   methods: {
     handleSubmit() {
-      const { getSelected, executeCommand, update } = this.root.propsAPI;
-      const { formModel } = this;
+      const { getSelected, executeCommand, update } = this.root.propsAPI
+      const { formModel } = this
       setTimeout(() => {
-        const item = getSelected()[0];
-        if (!item) return;
+        const item = getSelected()[0]
+        if (!item) return
         // 自動調整尺寸
         const adjustSize = model => {
-          if (model.type !== "node" || model.shape !== "flow-rect") {
-            return model;
+          if (model.type !== 'node' || model.shape !== 'flow-rect') {
+            return model
           }
-          const canvas = document.createElement("canvas");
-          const canvasContext = canvas.getContext("2d");
-          canvasContext.font = this.fontSize + "px System";
-          const maxWidth = this.maxNodeWidth;
-          let label = model.label.replace("\n", "");
-          let sourceWidth = this.defaultNodeWidth;
-          let sourceHeight = this.defaultNodeHeight;
-          const spacing = 10;
-          const widthWithSpacing = canvasContext.measureText(label).width + spacing;
-          model.size = `${sourceWidth}*${sourceHeight}`; // 先恢復默認尺寸
+          const canvas = document.createElement('canvas')
+          const canvasContext = canvas.getContext('2d')
+          canvasContext.font = this.fontSize + 'px System'
+          const maxWidth = this.maxNodeWidth
+          const label = model.label.replace('\n', '')
+          const sourceWidth = this.defaultNodeWidth
+          const sourceHeight = this.defaultNodeHeight
+          const spacing = 10
+          const widthWithSpacing = canvasContext.measureText(label).width + spacing
+          model.size = `${sourceWidth}*${sourceHeight}` // 先恢復默認尺寸
           if (widthWithSpacing <= sourceWidth || sourceWidth >= maxWidth) {
-            return model;
+            return model
           }
           // 自動撐寬
           if (widthWithSpacing <= maxWidth) {
             return {
               ...model,
               size: `${widthWithSpacing}*${sourceHeight}`
-            };
+            }
           }
           // 自動拆行
-          let multilineText = "";
-          let multilineCount = 1;
-          let multilineTextWidth = 0;
+          let multilineText = ''
+          let multilineCount = 1
+          let multilineTextWidth = 0
           for (const char of label) {
-            const { width } = canvasContext.measureText(char);
+            const { width } = canvasContext.measureText(char)
             if (multilineTextWidth + width + spacing >= maxWidth) {
-              multilineText += "\n";
-              multilineTextWidth = 0;
-              multilineCount++;
+              multilineText += '\n'
+              multilineTextWidth = 0
+              multilineCount++
             }
-            multilineText += char;
-            multilineTextWidth += width;
+            multilineText += char
+            multilineTextWidth += width
           }
           return {
             ...model,
@@ -148,17 +155,17 @@ export default {
               sourceHeight,
               this.fontSize * multilineCount * 1.2 + spacing
             )}`
-          };
-        };
-        const newFormModel = adjustSize(formModel);
-        console.log(newFormModel);
+          }
+        }
+        const newFormModel = adjustSize(formModel)
+        console.log(newFormModel)
         executeCommand(() => {
-          update(item, newFormModel);
-        });
-      }, 0);
+          update(item, newFormModel)
+        })
+      }, 0)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
