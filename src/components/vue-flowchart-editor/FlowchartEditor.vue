@@ -147,27 +147,40 @@ export default {
       }
     },
     handleBeforeChange(e) {
-      console.log(e)
-      console.log(this.chartData)
+      // console.log(e)
+      // console.log(this.chartData)
       const { ComNo, LoopNum, ProdNo, VersionNo } = this.chartData.nodes[0] || {
         ComNo: '', LoopNum: '', ProdNo: '', VersionNo: ''
       }
 
-      e.model.ComNo = ComNo
-      e.model.LoopNum = LoopNum
-      e.model.ProdNo = ProdNo
-      e.model.VersionNo = VersionNo
+      // e.model.ComNo = ComNo
+      // e.model.LoopNum = LoopNum
+      // e.model.ProdNo = ProdNo
+      // e.model.VersionNo = VersionNo
+      if (!this.readOnly) {
+        const { action, model } = e
+        console.log(action, model)
+
+        if (action === 'add') {
+          model.ComNo = ComNo
+          model.LoopNum = LoopNum
+          model.ProdNo = ProdNo
+          model.VersionNo = VersionNo
+        }
+      }
     },
     handleAfterChange(e) {
-      if (!this.readOnly) {
-        const { action, item } = e
-        console.log(action, item)
-        if (item && item.getModel) {
-          const model = item.getModel()
-          console.log(model)
-        }
-        // 可以根据 action 和 model 来决定是否删掉左侧用过的节点
-      }
+      const { action, item } = e
+      console.log(action, item)
+      // if (!this.readOnly) {
+      //   const { action, item } = e
+      //   console.log(action, item)
+      //   if (item && item.getModel) {
+      //     const model = item.getModel()
+      //     console.log(model)
+      //   }
+      //   // 可以根据 action 和 model 来决定是否删掉左侧用过的节点
+      // }
     },
     onBeforeViewportChange() {
     },

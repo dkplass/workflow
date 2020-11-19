@@ -69,7 +69,16 @@ export default {
       // this.flowChartData = JSON.parse(JSON.stringify(data))
       // console.log(this.flowChartData)
       update(data).then(response => {
-        console.log(response)
+        this.$bvModal.msgBoxOk(response, {
+          title: '更新訊息',
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: '確認',
+          headerClass: 'p-2',
+          footerClass: 'p-2 border-top-0',
+          centered: true
+        })
+        // console.log(response)
       }).catch(error => {
         console.log(error)
       })

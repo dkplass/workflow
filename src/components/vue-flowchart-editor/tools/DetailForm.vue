@@ -5,24 +5,40 @@
         <!--  customize properties -->
         <p class="form-item">
           <label>ID</label>
-          <input v-model="formModel.id" type="text" disabled>
+          <input v-model="formModel.id" type="text" disabled class="w-100">
         </p>
         <p class="form-item">
           <label>名稱</label>
-          <input v-model="formModel.label" type="text">
+          <select v-model="formModel.label" class="w-100">
+            <option value="領料">領料</option>
+            <option value="外加">外加</option>
+            <option value="內加">內加</option>
+            <option value="裁切">裁切</option>
+            <option value="超入">超入</option>
+            <option value="超出">超出</option>
+            <option value="針入">針入</option>
+            <option value="針出">針出</option>
+            <option value="品入">品入</option>
+            <option value="品出">品出</option>
+            <option value="外廠">外廠</option>
+          </select>
+          <!-- <input v-model="formModel.label" type="text"> -->
         </p>
         <p v-for="item in formModel.data" :key="item.name" class="form-item">
           <label>{{ item.name }}</label>
-          <input v-model="item.value">
+          <input v-model="item.value" class="w-100">
         </p>
         <hr>
         <p class="form-item">
           <label>顏色</label>
-          <input v-model="formModel.style.fill">
+          <span v-click-outside="closeColorPicker" class="w-100 position-relative">
+            <input :value="formModel.style.fill | hexFormat" class="w-100" :style="{ 'backgroundColor': formModel.style.fill }" @input="setColor" @click="colorPickerOpen = !colorPickerOpen">
+            <ColorPicker v-if="colorPickerOpen" :init-color="formModel.style.fill" @update-color="updateColor" />
+          </span>
         </p>
         <p class="form-item">
           <label>形狀</label>
-          <select v-model="formModel.shape">
+          <select v-model="formModel.shape" class="w-100">
             <option value="">-- 請選擇節點的形狀 --</option>
             <option value="flow-rect">rect</option>
             <option value="flow-circle">circle</option>
@@ -32,10 +48,13 @@
         </p>
         <p class="form-item">
           <label>尺寸</label>
-          <input v-model="formModel.size">
+          <input v-model="formModel.size" class="w-100">
+          <!-- <input v-model="nodeSizeWidth" class="w-50 mr-1">
+          *
+          <input v-model="nodeSizeHeight" class="w-50 ml-1"> -->
         </p>
         <p class="form-item">
-          <b-button v-if="!readOnly" size="sm" @click.prevent="handleSubmit">
+          <b-button v-if="!readOnly" size="sm" class="w-100" @click.prevent="handleSubmit">
             更新
           </b-button>
         </p>
@@ -52,7 +71,7 @@
         </p> -->
         <p class="form-item">
           <label>id</label>
-          <input v-model="formModel.id">
+          <input v-model="formModel.id" disabled>
         </p>
         <p class="form-item">
           <label>名稱</label>
@@ -74,10 +93,15 @@
 </template>
 
 <script>
+import ColorPicker from '@/components/color-picker/ColorPicker.vue'
+
 export default {
   name: 'EditorDetailForm',
   inject: ['root'],
   // props: ['type', 'readOnly'],
+  components: {
+    ColorPicker
+  },
   props: {
     type: {
       type: String,
@@ -91,7 +115,34 @@ export default {
       maxNodeWidth: 200,
       defaultNodeWidth: 80,
       defaultNodeHeight: 48,
-      fontSize: 12
+      fontSize: 12,
+      colorPickerOpen: false
+    }
+  },
+  computed: {
+    nodeSizeWidth: {
+      get() {
+        const width = this.formModel.size ? this.formModel.size.split('*')[0] : ''
+        return width
+      },
+      set(v) {
+        const width = v
+        const size = this.formModel.size.split('*')
+        size[0] = width
+        this.formModel.size = size.join('*')
+      }
+    },
+    nodeSizeHeight: {
+      get() {
+        const height = this.formModel.size ? this.formModel.size.split('*')[1] : ''
+        return height
+      },
+      set(v) {
+        const height = v
+        const size = this.formModel.size.split('*')
+        size[1] = height
+        this.formModel.size = size.join('*')
+      }
     }
   },
   created() {
@@ -163,6 +214,19 @@ export default {
           update(item, newFormModel)
         })
       }, 0)
+    },
+    updateColor(hex) {
+      this.formModel.style.fill = hex
+      this.formModel.style.stroke = hex
+      console.log(hex)
+    },
+    closeColorPicker() {
+      this.colorPickerOpen = false
+    },
+    setColor(e) {
+      console.log(e.target.value)
+      this.formModel.style.fill = e.target.value
+      // value => formModel.style.fill = value
     }
   }
 }

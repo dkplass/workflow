@@ -4,11 +4,18 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import router from './router'
 import store from './store'
 import '@/iconfont'
-
-Vue.config.productionTip = false
+import '@/directive/clickOutside'
+import * as filters from './filters'
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+
+// register global utility filters
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
+
+Vue.config.productionTip = false
 
 new Vue({
   router,
