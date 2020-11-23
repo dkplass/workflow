@@ -31,5 +31,9 @@ module.exports = {
       args[0].title = 'Workflow Editor'
       return args
     })
+
+    config
+      .entry('main')
+      .add('@babel/polyfill')
   }
 }
